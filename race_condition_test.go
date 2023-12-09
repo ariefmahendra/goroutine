@@ -39,6 +39,8 @@ func TestMutex(t *testing.T) {
 				mutex.Lock()
 				x = x + 1
 				mutex.Unlock()
+
+				// sekarang aman dan terhindar dari race condition dan nilainya udah pas 100.000
 			}
 		}()
 	}
