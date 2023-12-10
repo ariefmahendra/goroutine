@@ -173,5 +173,3 @@ func TestDefaultSelectChannel(t *testing.T) {
 		}
 	}
 }
-
-// Race Condition adalah kondisi dimana 2 goroutine atau lebih mengakses data yang sama secara bersamaan

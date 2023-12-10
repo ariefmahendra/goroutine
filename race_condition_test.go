@@ -47,3 +47,42 @@ func TestMutex(t *testing.T) {
 	time.Sleep(5 * time.Second)
 	fmt.Printf("Counter = %d", x)
 }
+
+// RW MUTEX (Read Write Mutex) adalah implementasi mutex yang lebih kompleks yang memungkinkan kita untuk melakukan locking data secara flexible
+// RW Mutex memiliki 2 lock, yakni lock untuk operasi read dan lock untuk operasi write
+
+type BankAccount struct {
+	RWMutex sync.RWMutex
+	Balance int
+}
+
+func (account *BankAccount) AddBalance(amount int) {
+	account.RWMutex.Lock()
+	account.Balance = account.Balance + amount
+	account.RWMutex.Unlock()
+}
+
+func (account *BankAccount) GetBalance() int {
+	// read lock
+	account.RWMutex.RLock()
+	balance := account.Balance
+
+	// read unlock
+	account.RWMutex.RUnlock()
+	return balance
+}
+
+func TestRWMutex(t *testing.T) {
+	account := BankAccount{}
+	for i := 0; i < 100; i++ {
+		go func() {
+			for j := 0; j < 100; j++ {
+				account.AddBalance(1)
+				fmt.Println(account.GetBalance())
+			}
+		}()
+	}
+	time.Sleep(5 * time.Second)
+	totalBalance := account.GetBalance()
+	fmt.Println("Total Balance :", totalBalance)
+}
