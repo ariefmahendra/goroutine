@@ -14,7 +14,14 @@ import (
 
 func TestPool(t *testing.T) {
 
-	pool := sync.Pool{}
+	// ketika data kosong, kita bisa ovveride ini
+	// atau bisa dikatakan sebagai default value yang mengembalikan string "New"
+	// digunakan agar nilai tidak <nil>
+	pool := sync.Pool{
+		New: func() interface{} {
+			return "New"
+		},
+	}
 
 	// proses memasukkan data kedalam pool
 	pool.Put("Arief")
